@@ -115,27 +115,45 @@ public class CoffeeMakerTest {
 	}
 	/**
 	 * Given a coffee maker with the recipe book
-	 * When we want to delete recipe, if it exists in the list of recipes
-	 * Then it will return the name of deleted recipe, otherwise return null
+	 * When we want to delete recipe
+	 * Then it will return the name of deleted recipe
 	 */
 	@Test
 	public void testDeleteRecipe(){
 		coffeeMaker.addRecipe(recipe1);
 		assertEquals(recipe1.getName(),coffeeMaker.deleteRecipe(0));
 		assertNull(coffeeMaker.deleteRecipe(0)); // Test already delete recipe
+	}
+	/**
+	 * Given a coffee maker without the recipe book
+	 * When we want to delete recipe that doesn't exist
+	 * It will return null
+	 */
+	@Test
+	public void testDeleteNonExistRecipe(){
 		assertNull(coffeeMaker.deleteRecipe(1)); // Test do not exist recipe
 	}
 	/**
 	 * Given a coffee maker with the recipe book
-	 * When we want to edit recipe, if it exists in the list of recipes
-	 * Then it will return the name of successfully edited recipe, otherwise return null
+	 * When we want to edit recipe
+	 * Then it will return the name of successfully edited recipe
 	 */
 	@Test
 	public void testEditRecipe(){
 		coffeeMaker.addRecipe(recipe1);
 		assertEquals(recipe1.getName(),coffeeMaker.editRecipe(0, recipe2));
+	}
+	/**
+	 * Given a coffee maker with the recipe book
+	 * When we want to edit recipe the doesn't exist in coffee maker
+	 * Then it will return null
+	 */
+	@Test
+	public void testEditNonExistRecipe(){
+		coffeeMaker.addRecipe(recipe1);
 		assertNull(coffeeMaker.editRecipe(1, recipe2));
 	}
+
 	/**
 	 * Given a coffee maker with the default inventory
 	 * When we add inventory with well-formed quantities
