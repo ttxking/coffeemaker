@@ -207,7 +207,7 @@ public class CoffeeMakerTest {
 	 * Otherwise, if we pay the exact price we get zero change.
 	 */
 	@Test
-	public void testPurChaseBeverage() {
+	public void testPurchaseBeverage() {
 		coffeeMaker.addRecipe(recipe1);
 		assertEquals(25, coffeeMaker.makeCoffee(0, 75));
 		assertEquals(0, coffeeMaker.makeCoffee(0, 50));
