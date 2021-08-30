@@ -18,18 +18,18 @@
  */
 package edu.ncsu.csc326.coffeemaker;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import edu.ncsu.csc326.coffeemaker.exceptions.InventoryException;
 import edu.ncsu.csc326.coffeemaker.exceptions.RecipeException;
 
+import static org.junit.Assert.*;
+
 /**
  * Unit tests for CoffeeMaker class.
  * 
- * @author Sarah Heckman
+ * @author Anusid Wachiracharoenwong
  */
 public class CoffeeMakerTest {
 	
@@ -91,8 +91,51 @@ public class CoffeeMakerTest {
 		recipe4.setAmtSugar("1");
 		recipe4.setPrice("65");
 	}
-	
-	
+	/**
+	 * Given a coffee maker with the recipe book
+	 * When we add a recipe,only three recipes may be added to the coffee maker.
+	 * If we add the fourth recipe the program should return False, otherwise True
+	 */
+	@Test
+	public void testAddRecipe(){
+		assertTrue(coffeeMaker.addRecipe(recipe1));
+		assertTrue(coffeeMaker.addRecipe(recipe2));
+		assertTrue(coffeeMaker.addRecipe(recipe3));
+		assertFalse(coffeeMaker.addRecipe(recipe4)); // this should pass, Only three recipes may be added to the CoffeeMaker.
+	}
+	/**
+	 * Given a coffee maker with the recipe book
+	 * When we add a recipe, each recipe name must be unique in the recipe list
+	 * If we add the recipe with duplicate name the program should return False, otherwise True
+	 */
+	@Test
+	public void testAddDuplicateRecipe(){
+		coffeeMaker.addRecipe(recipe1);
+		assertFalse(coffeeMaker.addRecipe(recipe1));
+	}
+	/**
+	 * Given a coffee maker with the recipe book
+	 * When we want to delete recipe, if it exists in the list of recipes
+	 * Then it will return the name of deleted recipe, otherwise return null
+	 */
+	@Test
+	public void testDeleteRecipe(){
+		coffeeMaker.addRecipe(recipe1);
+		assertEquals(recipe1.getName(),coffeeMaker.deleteRecipe(0));
+		assertNull(coffeeMaker.deleteRecipe(0)); // Test already delete recipe
+		assertNull(coffeeMaker.deleteRecipe(1)); // Test do not exist recipe
+	}
+	/**
+	 * Given a coffee maker with the recipe book
+	 * When we want to edit recipe, if it exists in the list of recipes
+	 * Then it will return the name of successfully edited recipe, otherwise return null
+	 */
+	@Test
+	public void testEditRecipe(){
+		coffeeMaker.addRecipe(recipe1);
+		assertEquals(recipe1.getName(),coffeeMaker.editRecipe(0, recipe2));
+		assertNull(coffeeMaker.editRecipe(1, recipe2));
+	}
 	/**
 	 * Given a coffee maker with the default inventory
 	 * When we add inventory with well-formed quantities
@@ -104,8 +147,10 @@ public class CoffeeMakerTest {
 	@Test
 	public void testAddInventory() throws InventoryException {
 		coffeeMaker.addInventory("4","7","0","9");
+		coffeeMaker.addInventory("0","0","0","0");
+		coffeeMaker.addInventory("3","6","9","12"); // this should not fail
+		coffeeMaker.addInventory("10","10","10","10");// this should not fail
 	}
-	
 	/**
 	 * Given a coffee maker with the default inventory
 	 * When we add inventory with malformed quantities (i.e., a negative 
@@ -118,18 +163,56 @@ public class CoffeeMakerTest {
 	@Test(expected = InventoryException.class)
 	public void testAddInventoryException() throws InventoryException {
 		coffeeMaker.addInventory("4", "-1", "asdf", "3");
+		coffeeMaker.addInventory("coffee", "milk", "sugar", "choco");
+
 	}
-	
-	/**
-	 * Given a coffee maker with one valid recipe
-	 * When we make coffee, selecting the valid recipe and paying more than 
-	 * 		the coffee costs
-	 * Then we get the correct change back.
+	 /**
+	  * Given a coffee maker with the default inventory
+	  * When we check inventory
+	  * Then the units of each item in the inventory are displayed.
+	  *
+	  * @throws InventoryException  if there was an error parsing the quanity
+	  * 		to a positive integer.
 	 */
 	@Test
-	public void testMakeCoffee() {
+	public void testCheckInventory() throws InventoryException {
+		String defaultInventory = "Coffee: 15\nMilk: 15\nSugar: 15\nChocolate: 15\n"; // default contain 15 of each recipe
+		assertEquals(defaultInventory, coffeeMaker.checkInventory());
+		coffeeMaker.addInventory("0","5","0","3");
+		String updatedInventory = "Coffee: 15\nMilk: 20\nSugar: 15\nChocolate: 18\n";
+		assertEquals(updatedInventory, coffeeMaker.checkInventory());
+	}
+	/**
+	 * Given a coffee maker with one valid recipe
+	 * When we make coffee and paying more than the coffee costs
+	 * Then we get the correct change back.
+	 * Otherwise, if we pay the exact price we get zero change.
+	 */
+	@Test
+	public void testPurChaseBeverage() {
 		coffeeMaker.addRecipe(recipe1);
 		assertEquals(25, coffeeMaker.makeCoffee(0, 75));
+		assertEquals(0, coffeeMaker.makeCoffee(0, 50));
+	}
+	/**
+	 * Given a coffee maker with one valid recipe
+	 * When we make coffee, paying less than the coffee costs
+	 * Then we get the money back
+	 */
+	@Test
+	public void testPurChaseBeverageWithNotEnoughMoney() {
+		coffeeMaker.addRecipe(recipe1); // cost 50
+		assertEquals(25, coffeeMaker.makeCoffee(0,25)); // not enough amount paid
+	}
+	/**
+	 * Given a coffee maker with default inventory
+	 * When we make beverage, which doesn't have enough recipe in the inventory
+	 * Then we get the money back
+	 */
+	@Test
+	public void testPurChaseBeverageWithNotEnoughInventory() {
+		coffeeMaker.addRecipe(recipe2); // add mocha which use 20 chocolate while we only have 15 chocolate
+		assertEquals(75, coffeeMaker.makeCoffee(1,75)); // not enough recipe
 	}
 
 }
