@@ -189,15 +189,66 @@ public class CoffeeMakerTest {
 	  * When we check inventory
 	  * Then the units of each item in the inventory are displayed.
 	  *
-	  * @throws InventoryException  if there was an error parsing the quanity
-	  * 		to a positive integer.
 	 */
 	@Test
-	public void testCheckInventory() throws InventoryException {
+	public void testCheckInventory() {
 		String defaultInventory = "Coffee: 15\nMilk: 15\nSugar: 15\nChocolate: 15\n"; // default contain 15 of each recipe
 		assertEquals(defaultInventory, coffeeMaker.checkInventory());
-		coffeeMaker.addInventory("0","5","0","3");
-		String updatedInventory = "Coffee: 15\nMilk: 20\nSugar: 15\nChocolate: 18\n";
+	}
+	/**
+	 * Given a coffee maker with the default inventory
+	 * When we updated the coffee inventory
+	 * Then the units of coffee in the inventory should be updated to the correct amount.
+	 *
+	 * @throws InventoryException  if there was an error parsing the quanity
+	 * 		to a positive integer.
+	 */
+	@Test
+	public void testUpdateCoffeeInventory() throws InventoryException {
+		coffeeMaker.addInventory("5","0","0","0");
+		String updatedInventory = "Coffee: 20\nMilk: 15\nSugar: 15\nChocolate: 15\n";
+		assertEquals(updatedInventory, coffeeMaker.checkInventory());
+	}
+	/**
+	 * Given a coffee maker with the default inventory
+	 * When we updated the milk inventory
+	 * Then the units of milk in the inventory should be updated to the correct amount.
+	 *
+	 * @throws InventoryException  if there was an error parsing the quanity
+	 * 		to a positive integer.
+	 */
+	@Test
+	public void testUpdateMilkInventory() throws InventoryException {
+		coffeeMaker.addInventory("0","5","0","0");
+		String updatedInventory = "Coffee: 15\nMilk: 20\nSugar: 15\nChocolate: 15\n";
+		assertEquals(updatedInventory, coffeeMaker.checkInventory());
+	}
+	/**
+	 * Given a coffee maker with the default inventory
+	 * When we updated the sugar inventory
+	 * Then the units of sugar in the inventory should be updated to the correct amount.
+	 *
+	 * @throws InventoryException  if there was an error parsing the quanity
+	 * 		to a positive integer.
+	 */
+	@Test
+	public void testUpdateSugarInventory() throws InventoryException {
+		coffeeMaker.addInventory("0","0","5","0");
+		String updatedInventory = "Coffee: 15\nMilk: 15\nSugar: 20\nChocolate: 15\n";
+		assertEquals(updatedInventory, coffeeMaker.checkInventory());
+	}
+	/**
+	 * Given a coffee maker with the default inventory
+	 * When we updated the chocolate inventory
+	 * Then the units of chocolate in the inventory should be updated to the correct amount.
+	 *
+	 * @throws InventoryException  if there was an error parsing the quanity
+	 * 		to a positive integer.
+	 */
+	@Test
+	public void testUpdateChocolateInventory() throws InventoryException {
+		coffeeMaker.addInventory("0","0","0","5");
+		String updatedInventory = "Coffee: 15\nMilk: 15\nSugar: 15\nChocolate: 20\n";
 		assertEquals(updatedInventory, coffeeMaker.checkInventory());
 	}
 	/**
