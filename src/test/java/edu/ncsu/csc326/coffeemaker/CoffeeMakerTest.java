@@ -289,11 +289,23 @@ public class CoffeeMakerTest {
 
     /**
      * Given a coffee maker with default inventory
-     * When we make beverage, which doesn't have enough recipe in the inventory
+     * When we make beverage, which doesn't have enough ingredients in the inventory
      * Then we get the money back
      */
     @Test
     public void testPurChaseBeverageWithNotEnoughInventory() {
+        coffeeMaker.addRecipe(recipe2); // add mocha which use 20 chocolate while we only have 15 chocolate
+        assertEquals(75, coffeeMaker.makeCoffee(0, 75)); // not enough recipe
+    }
+
+
+    /**
+     * Given a coffee maker with default inventory
+     * When we make beverage, which doesn't have the recipe in the inventory
+     * Then we get the money back
+     */
+    @Test
+    public void testPurChaseBeverageWithNonValidRecipe() {
         coffeeMaker.addRecipe(recipe2); // add mocha which use 20 chocolate while we only have 15 chocolate
         assertEquals(75, coffeeMaker.makeCoffee(1, 75)); // not enough recipe
     }
