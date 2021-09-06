@@ -45,6 +45,24 @@ public class CoffeeMakerTest {
     private Recipe recipe4;
 
     /**
+     * Method to create recipes with name, chocolate, coffee, milk, sugar
+     * and price.
+     *
+     * @throws RecipeException if there was an error parsing the ingredient
+     *                         amount when setting up the recipe.
+     */
+    public Recipe createRecipe(String name, String chocolate, String coffee, String milk, String sugar, String price) throws RecipeException {
+        Recipe recipe = new Recipe();
+        recipe.setName(name);
+        recipe.setAmtChocolate(chocolate);
+        recipe.setAmtCoffee(coffee);
+        recipe.setAmtMilk(milk);
+        recipe.setAmtSugar(sugar);
+        recipe.setPrice(price);
+        return recipe;
+    }
+
+    /**
      * Initializes some recipes to test with and the {@link CoffeeMaker}
      * object we wish to test.
      *
@@ -55,41 +73,17 @@ public class CoffeeMakerTest {
     public void setUp() throws RecipeException {
         coffeeMaker = new CoffeeMaker();
 
-        //Set up for r1
-        recipe1 = new Recipe();
-        recipe1.setName("Coffee");
-        recipe1.setAmtChocolate("0");
-        recipe1.setAmtCoffee("3");
-        recipe1.setAmtMilk("1");
-        recipe1.setAmtSugar("1");
-        recipe1.setPrice("50");
+        //Set up for coffee
+        recipe1 = createRecipe("Coffee","0", "3", "1", "1", "50");
 
-        //Set up for r2
-        recipe2 = new Recipe();
-        recipe2.setName("Mocha");
-        recipe2.setAmtChocolate("20");
-        recipe2.setAmtCoffee("3");
-        recipe2.setAmtMilk("1");
-        recipe2.setAmtSugar("1");
-        recipe2.setPrice("75");
+        //Set up for mocha
+        recipe2 = createRecipe("Mocha", "20", "3", "1", "1", "75");
 
-        //Set up for r3
-        recipe3 = new Recipe();
-        recipe3.setName("Latte");
-        recipe3.setAmtChocolate("0");
-        recipe3.setAmtCoffee("3");
-        recipe3.setAmtMilk("3");
-        recipe3.setAmtSugar("1");
-        recipe3.setPrice("100");
+        //Set up for latte
+        recipe3 = createRecipe("Latte", "0", "3", "3", "1", "100");
 
-        //Set up for r4
-        recipe4 = new Recipe();
-        recipe4.setName("Hot Chocolate");
-        recipe4.setAmtChocolate("4");
-        recipe4.setAmtCoffee("0");
-        recipe4.setAmtMilk("1");
-        recipe4.setAmtSugar("1");
-        recipe4.setPrice("65");
+        //Set up for hot chocolate
+        recipe4 = createRecipe("Hot Chocolate", "4", "0", "1", "1", "65");
     }
 
     /**
@@ -165,7 +159,7 @@ public class CoffeeMakerTest {
      * When we add inventory with well-formed quantities
      * Then we do not get an exception trying to read the inventory quantities.
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test
@@ -182,7 +176,7 @@ public class CoffeeMakerTest {
      * quantity and a non-numeric string)
      * Then we get an inventory exception
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test(expected = InventoryException.class)
@@ -223,7 +217,7 @@ public class CoffeeMakerTest {
      * When we updated the milk inventory
      * Then the units of milk in the inventory should be updated to the correct amount.
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test
@@ -238,7 +232,7 @@ public class CoffeeMakerTest {
      * When we updated the sugar inventory
      * Then the units of sugar in the inventory should be updated to the correct amount.
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test

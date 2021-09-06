@@ -37,7 +37,7 @@ public class InventoryTest {
      * Given a default inventory
      * When we want to add chocolate value, if the amount is not a number
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test(expected = InventoryException.class)
@@ -49,7 +49,7 @@ public class InventoryTest {
      * Given a default inventory
      * When we want to add chocolate value, if the amount is a negative integer
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test(expected = InventoryException.class)
@@ -76,7 +76,7 @@ public class InventoryTest {
      * Given a default inventory
      * When we want to add coffee value, if the amount is not a number
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test(expected = InventoryException.class)
@@ -88,7 +88,7 @@ public class InventoryTest {
      * Given a default inventory
      * When we want to add coffee value, if the amount is a negative integer
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test(expected = InventoryException.class)
@@ -115,7 +115,7 @@ public class InventoryTest {
      * Given a default inventory
      * When we want to add milk value, if the amount is not a number
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test(expected = InventoryException.class)
@@ -127,7 +127,7 @@ public class InventoryTest {
      * Given a default inventory
      * When we want to add milk value, if the amount is a negative integer
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test(expected = InventoryException.class)
@@ -154,7 +154,7 @@ public class InventoryTest {
      * Given a default inventory
      * When we want to add sugar value, if the amount is not a number
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test(expected = InventoryException.class)
@@ -166,7 +166,7 @@ public class InventoryTest {
      * Given a default inventory
      * When we want to add sugar value, if the amount is a negative integer
      *
-     * @throws InventoryException if there was an error parsing the quanity
+     * @throws InventoryException if there was an error parsing the quantity
      *                            to a positive integer.
      */
     @Test(expected = InventoryException.class)
@@ -174,6 +174,15 @@ public class InventoryTest {
         inventory.addSugar("-1");
     }
 
+    /**
+     * Given a default special recipe which its amount of ingredient used
+     * exceed number of ingredient in the inventory
+     * When we check if there is enough ingredients
+     * Then it returns True when there is, otherwise False.
+     *
+     * @throws RecipeException if there was an error parsing the ingredient
+     *      *                   amount when setting up the recipe.
+     */
     @Test
     public void testEnoughIngredients() throws RecipeException {
         Recipe specialRecipe = new Recipe();
