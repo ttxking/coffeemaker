@@ -1,10 +1,9 @@
 package edu.ncsu.csc326.coffeemaker;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import edu.ncsu.csc326.coffeemaker.exceptions.InventoryException;
 import edu.ncsu.csc326.coffeemaker.exceptions.RecipeException;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
@@ -28,7 +27,7 @@ public class InventoryTest {
         inventory.setChocolate(0);
         assertEquals(0, inventory.getChocolate());
         inventory.setChocolate(30);
-        assertEquals(30,inventory.getChocolate());
+        assertEquals(30, inventory.getChocolate());
         inventory.setChocolate(-15);
         assertEquals(30, inventory.getChocolate());
     }
@@ -67,7 +66,7 @@ public class InventoryTest {
         inventory.setCoffee(0);
         assertEquals(0, inventory.getCoffee());
         inventory.setCoffee(30);
-        assertEquals(30,inventory.getCoffee());
+        assertEquals(30, inventory.getCoffee());
         inventory.setCoffee(-15);
         assertEquals(30, inventory.getCoffee());
     }
@@ -106,7 +105,7 @@ public class InventoryTest {
         inventory.setMilk(0);
         assertEquals(0, inventory.getMilk());
         inventory.setMilk(30);
-        assertEquals(30,inventory.getMilk());
+        assertEquals(30, inventory.getMilk());
         inventory.setMilk(-15);
         assertEquals(30, inventory.getMilk());
     }
@@ -145,7 +144,7 @@ public class InventoryTest {
         inventory.setSugar(0);
         assertEquals(0, inventory.getSugar());
         inventory.setSugar(30);
-        assertEquals(30,inventory.getSugar());
+        assertEquals(30, inventory.getSugar());
         inventory.setSugar(-15);
         assertEquals(30, inventory.getSugar());
     }
@@ -181,7 +180,7 @@ public class InventoryTest {
      * Then it returns True when there is, otherwise False.
      *
      * @throws RecipeException if there was an error parsing the ingredient
-     *      *                   amount when setting up the recipe.
+     *                         *                   amount when setting up the recipe.
      */
     @Test
     public void testEnoughIngredients() throws RecipeException {

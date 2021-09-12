@@ -18,13 +18,13 @@
  */
 package edu.ncsu.csc326.coffeemaker;
 
+import edu.ncsu.csc326.coffeemaker.exceptions.InventoryException;
+import edu.ncsu.csc326.coffeemaker.exceptions.RecipeException;
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.ncsu.csc326.coffeemaker.exceptions.InventoryException;
-import edu.ncsu.csc326.coffeemaker.exceptions.RecipeException;
-
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for CoffeeMaker class.
@@ -34,15 +34,22 @@ import static org.junit.Assert.*;
 public class CoffeeMakerTest {
 
     /**
-     * The object under test.
+     * The object under test
      */
     private CoffeeMaker coffeeMaker;
 
+    /**
+     * CoffeeMaker with mock RecipeBook
+     */
+    private CoffeeMaker coffeeMaker2;
     // Sample recipes to use in testing.
     private Recipe recipe1;
     private Recipe recipe2;
     private Recipe recipe3;
     private Recipe recipe4;
+
+    private RecipeBook recipeBook;
+    private Recipe[] recipes;
 
     /**
      * Method to create recipes with name, chocolate, coffee, milk, sugar
@@ -74,7 +81,7 @@ public class CoffeeMakerTest {
         coffeeMaker = new CoffeeMaker();
 
         //Set up for coffee
-        recipe1 = createRecipe("Coffee","0", "3", "1", "1", "50");
+        recipe1 = createRecipe("Coffee", "0", "3", "1", "1", "50");
 
         //Set up for mocha
         recipe2 = createRecipe("Mocha", "20", "3", "1", "1", "75");
@@ -84,6 +91,14 @@ public class CoffeeMakerTest {
 
         //Set up for hot chocolate
         recipe4 = createRecipe("Hot Chocolate", "4", "0", "1", "1", "65");
+
+        recipeBook = mock(RecipeBook.class);
+
+        recipes = new Recipe[]{recipe1, recipe2, recipe3, recipe4};
+
+        coffeeMaker2 = new CoffeeMaker(recipeBook, new Inventory());
+
+
     }
 
     /**
@@ -292,7 +307,6 @@ public class CoffeeMakerTest {
         assertEquals(75, coffeeMaker.makeCoffee(0, 75)); // not enough recipe
     }
 
-
     /**
      * Given a coffee maker with default inventory
      * When we make beverage, which doesn't have the recipe in the inventory
@@ -300,8 +314,89 @@ public class CoffeeMakerTest {
      */
     @Test
     public void testPurChaseBeverageWithNonValidRecipe() {
-        coffeeMaker.addRecipe(recipe2); // add mocha which use 20 chocolate while we only have 15 chocolate
-        assertEquals(75, coffeeMaker.makeCoffee(1, 75)); // not enough recipe
+        coffeeMaker.addRecipe(recipe3); // add mocha which use 20 chocolate while we only have 15 chocolate
+        assertEquals(75, coffeeMaker.makeCoffee(1, 75)); // non valid recipe
+    }
+
+    /**
+     * Test that the RecipeBook was initialized (mocked)
+     * and some methods in the class.
+     */
+    @Test
+    public void testInitializedMockRecipeBook() {
+        // test that recipe book was really initialized (mocked)
+        assertNotNull(recipeBook);
+        // a real recipe book would add recipe and return true
+        assertFalse(recipeBook.addRecipe(recipe1));
+        // methods that return an object reference will return nul
+        assertNull(recipeBook.getRecipes());
+    }
+
+    /**
+     * Verify that mock RecipeBook is call at least 4 four time for
+     * a successful purchase.
+     */
+    @Test
+    public void PurchaseBeverageWithMock() {
+        when(recipeBook.getRecipes()).thenReturn(recipes);
+        // recipe1 price is 50
+        assertEquals(0, coffeeMaker2.makeCoffee(0, 50));
+        // for a successful purchase in the CoffeeMaker gerRecipes() is called four time at least
+        verify(recipeBook, atMost(4)).getRecipes();
+    }
+
+    @Test
+    public void testPurChaseBeverageWithNotEnoughMoneyMock() {
+        when(recipeBook.getRecipes()).thenReturn(recipes);
+        // recipe1 price is 50
+        assertEquals(25, coffeeMaker2.makeCoffee(0, 25));
+        // for unsuccessful purchase in the CoffeeMaker gerRecipes() is called at least once
+        verify(recipeBook, atLeastOnce()).getRecipes();
+    }
+
+    @Test
+    public void testPurChaseBeverageWithNotEnoughInventoryMock() {
+        when(recipeBook.getRecipes()).thenReturn(recipes);
+        // recipe2 used 20 chocolate, but the default inventory contains only 15
+        assertEquals(75, coffeeMaker2.makeCoffee(0, 75));
+        // for unsuccessful purchase in the CoffeeMaker gerRecipes() is called at least once
+        verify(recipeBook, atLeastOnce()).getRecipes();
+    }
+
+    @Test
+    public void testPurChaseBeverageWithNonValidRecipeMock() {
+        // we simulate the out of range as null which is default in recipeBook
+        when(recipeBook.getRecipes()).thenReturn(new Recipe[]{recipe1, recipe2, recipe3, recipe4, null});
+        // CoffeeMaker only contains 4 recipe, but we want to purchase the 5th
+        assertEquals(50, coffeeMaker2.makeCoffee(4, 50));
+        // for unsuccessful purchase in the CoffeeMaker gerRecipes() is called at least once
+        verify(recipeBook, atMostOnce()).getRecipes();
+    }
+
+    @Test
+    public void testNumberOfGetAmountMethodCalled() {
+        // recipe that is being used
+        recipes[0] = mock(Recipe.class);
+        // another recipe that is not being used
+        recipes[1] = mock(Recipe.class);
+        when(recipeBook.getRecipes()).thenReturn(recipes);
+        // make coffee with recipe 1
+        coffeeMaker2.makeCoffee(0, 50);
+
+        // the recipe that being used
+        verify(recipes[0], atLeastOnce()).getAmtChocolate();
+        verify(recipes[0], atLeastOnce()).getAmtCoffee();
+        verify(recipes[0], atLeastOnce()).getAmtMilk();
+        verify(recipes[0], atLeastOnce()).getAmtSugar();
+        verify(recipes[0], atLeastOnce()).getPrice();
+
+        // the recipe1 will never be called
+        verify(recipes[1], never()).getAmtChocolate();
+        verify(recipes[1], never()).getAmtCoffee();
+        verify(recipes[1], never()).getAmtMilk();
+        verify(recipes[1], never()).getAmtSugar();
+        verify(recipes[1], never()).getPrice();
+
     }
 
 }
