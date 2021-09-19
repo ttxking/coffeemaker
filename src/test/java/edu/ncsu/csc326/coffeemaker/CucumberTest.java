@@ -1,4 +1,5 @@
 package edu.ncsu.csc326.coffeemaker;
+
 import edu.ncsu.csc326.coffeemaker.exceptions.InventoryException;
 import edu.ncsu.csc326.coffeemaker.exceptions.RecipeException;
 import io.cucumber.java.en.And;
@@ -6,25 +7,23 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import java.util.Objects;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class CucumberTest {
-    private CoffeeMaker coffeeMaker;
     boolean status;
     Integer amtDeposit;
     Inventory inventory;
+    private CoffeeMaker coffeeMaker;
 
     @Given("coffeemaker is in the waiting state")
     public void coffeemakerIsInTheWaitingState() {
-       coffeeMaker = new CoffeeMaker();
-       inventory = new Inventory();
+        coffeeMaker = new CoffeeMaker();
+        inventory = new Inventory();
     }
 
     @When("I add {int} recipe(s) to coffeemaker")
     public void iAddRecipeToCoffeemaker(Integer int1) {
-        for(int i = 1; i<=int1 ; i++){
+        for (int i = 1; i <= int1; i++) {
             Recipe recipe = new Recipe();
             recipe.setName("Coffee ver " + (i));
             status = coffeeMaker.addRecipe(recipe);
@@ -34,13 +33,13 @@ public class CucumberTest {
 
     @Then("coffeemaker has {int} recipe and coffeemaker return {word}")
     public void coffeemakerHasRecipeAndCoffeemakerReturnTrue(int int1, String word) {
-       int numOfRecipe = 0;
-       for(Recipe recipe: coffeeMaker.getRecipes()) {
-           if (recipe==null || recipe.getClass() != Recipe.class) return;
-           numOfRecipe++;
-       }
-       assertEquals(numOfRecipe, int1);
-       assertEquals(status, Boolean.parseBoolean(word));
+        int numOfRecipe = 0;
+        for (Recipe recipe : coffeeMaker.getRecipes()) {
+            if (recipe == null || recipe.getClass() != Recipe.class) return;
+            numOfRecipe++;
+        }
+        assertEquals(numOfRecipe, int1);
+        assertEquals(status, Boolean.parseBoolean(word));
     }
 
     @When("I purchase beverage that cost {word} Baht from coffeemaker")
@@ -48,10 +47,10 @@ public class CucumberTest {
         Recipe recipe = new Recipe();
         recipe.setPrice(price);
         if (price.equals("60")) {
-          recipe.setAmtCoffee("10");
-          recipe.setAmtMilk("20");
-          recipe.setAmtChocolate("0");
-          recipe.setAmtSugar("0");
+            recipe.setAmtCoffee("10");
+            recipe.setAmtMilk("20");
+            recipe.setAmtChocolate("0");
+            recipe.setAmtSugar("0");
         }
         coffeeMaker.addRecipe(recipe);
     }
@@ -99,6 +98,6 @@ public class CucumberTest {
             case "sugar":
                 assertEquals(amt, inventory.getSugar());
                 break;
+        }
     }
-}
 }
