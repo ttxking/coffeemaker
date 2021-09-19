@@ -333,8 +333,8 @@ public class CoffeeMakerTest {
     }
 
     /**
-     * Verify that mock RecipeBook is call at least 4 four time for
-     * a successful purchase.
+     * Verify that mock RecipeBook is call at most 4 four times
+     * for a successful purchase.
      */
     @Test
     public void PurchaseBeverageWithMock() {
@@ -345,6 +345,9 @@ public class CoffeeMakerTest {
         verify(recipeBook, atMost(4)).getRecipes();
     }
 
+    /**
+     * Test purchase a beverage with not enough money with mock recipeBook.
+     */
     @Test
     public void testPurChaseBeverageWithNotEnoughMoneyMock() {
         when(recipeBook.getRecipes()).thenReturn(recipes);
@@ -354,6 +357,9 @@ public class CoffeeMakerTest {
         verify(recipeBook, atLeastOnce()).getRecipes();
     }
 
+    /**
+     * Test purchase a beverage with not enough inventory with mock recipeBook.
+     */
     @Test
     public void testPurChaseBeverageWithNotEnoughInventoryMock() {
         when(recipeBook.getRecipes()).thenReturn(recipes);
@@ -363,6 +369,9 @@ public class CoffeeMakerTest {
         verify(recipeBook, atLeastOnce()).getRecipes();
     }
 
+    /**
+     * Test purchase a beverage with non-valid recipe with mock recipeBook.
+     */
     @Test
     public void testPurChaseBeverageWithNonValidRecipeMock() {
         // we simulate the out of range as null which is default in recipeBook
@@ -373,6 +382,11 @@ public class CoffeeMakerTest {
         verify(recipeBook, atMostOnce()).getRecipes();
     }
 
+    /**
+     * Verify that mock recipe get amount method is call at least once
+     * when making that recipe with coffeeMaker.
+     * However, the unused recipe will never be called.
+     */
     @Test
     public void testNumberOfGetAmountMethodCalled() {
         // recipe that is being used
